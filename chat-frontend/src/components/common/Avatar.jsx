@@ -14,10 +14,21 @@ export default function Avatar({
     xl: 'w-16 h-16',
   };
 
+  const getAvatarUrl = (url) => {
+    if (!url) return 'https://via.placeholder.com/150';
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    
+    // Get base URL from API URL (remove /api)
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const baseUrl = apiUrl.replace(/\/api\/?$/, '');
+    
+    return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   return (
     <div className={clsx('relative', sizes[size], className)}>
       <img
-        src={src || 'https://via.placeholder.com/150'}
+        src={getAvatarUrl(src)}
         alt={alt || 'Avatar'}
         className="w-full h-full rounded-full object-cover"
       />
